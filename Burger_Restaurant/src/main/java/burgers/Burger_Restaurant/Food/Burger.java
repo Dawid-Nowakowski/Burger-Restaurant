@@ -1,29 +1,66 @@
 package burgers.Burger_Restaurant.Food;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Stream;
 
+class BurgerManager {
+    private final List<Burger> availableBurgers;
+
+    public BurgerManager() {
+        availableBurgers = createAvailableBurgers();
+    }
+
+    public List<Burger> getAvailableBurgers() {
+        return availableBurgers;
+    }
+
+    private static List<Burger> createAvailableBurgers(){
+        return List.of(
+                new Burger("Hamburger", usedToppings(0, 12, 15, 1, 6, 2, 25)),
+                new Burger("Cheeseburger", usedToppings(0, 12, 15, 1, 6, 2, 18, 19, 25)),
+                new Burger("Veggie", usedToppings(0, 8, 11, 7, 1, 2, 5, 30)),
+                new Burger("Meat-boy", usedToppings(0, 14, 15, 1, 6, 16, 17, 26)),
+                new Burger("Chicken burger", usedToppings(0, 13, 15, 1, 6, 2, 25)),
+                new Burger("Hot burger", usedToppings(0, 12, 15, 9, 6, 3, 10, 29)),
+                new Burger("Cheesaur", usedToppings(22, 23, 4, 6, 1, 18, 19)
+                ));
+    }
+
+    private static Topping[] usedToppings(Integer... toppings) {
+        ToppingManager toppingManager = new ToppingManager();
+
+        return Stream.of(toppings)
+                .map(toppingManager::getToppingByIndex)
+                .toArray(Topping[]::new);
+    }
+}
 public class Burger {
-    enum Bun {
-        PLAIN, SESAME, WHEAT, GRAHAM;
+    public enum Bun {
+        PLAIN(1.12), SESAME(1.25), WHEAT(1.12), GRAHAM(1.18);
+        private final double price;
+
+        Bun(double price) {
+            this.price = price;
+        }
 
         public double getPrice() {
-            return switch (this) {
-                case PLAIN, WHEAT -> 1.12;
-                case SESAME -> 1.25;
-                case GRAHAM -> 1.18;
-            };
+            return price;
         }
     }
 
     private String name;
-    private Bun bun;
-    private List<Topping> toppings;
+    private final Bun bun;
+    private final List<Topping> toppings;
     private Double price;
 
+    public Burger(int index){
+        BurgerManager burgerManager = new BurgerManager();
+        Burger preparedBurger = burgerManager.getAvailableBurgers().get(index);
+        name = preparedBurger.getName();
+        bun = preparedBurger.getBun();
+        toppings = preparedBurger.getToppings();
+        price = preparedBurger.getPrice();
+    }
     private Burger(Bun bun, Topping... toppings) {
         name = "Custom";
         this.bun = bun;
@@ -35,45 +72,18 @@ public class Burger {
         price = total;
     }
 
-    public Burger(String name, Topping... toppings) {
+    protected Burger(String name, Topping... toppings) {
         this(Bun.PLAIN, toppings);
         this.name = name;
-        double total = bun.getPrice();
-        for (var topping : toppings) {
-            total += topping.getPrice();
-        }
-        price = total;
+//        double total = bun.getPrice();
+//        for (var topping : toppings) {
+//            total += topping.getPrice();
+//        }
+//        price = total;
     }
 
-    public Burger(int index) {
-        List<Burger> availableBurgers = new ArrayList<>(List.of(
-                new Burger("Hamburger", usedToppings("lettuce", "beef patty", "Bacon", "Tomato", "pickles", "onion (raw)", "bbq")),
-                new Burger("Cheeseburger", usedToppings("lettuce", "beef patty", "bacon", "tomato", "pickles", "onion (raw)", "cheddar", "mozzarella", "bbq")),
-                new Burger("Veggie", usedToppings("lettuce", "beetroot", "falafel", "avocado", "tomato", "onion (raw)", "red pepper", "honey mustard")),
-                new Burger("Meat-boy", usedToppings("lettuce", "beef patty", "bacon", "tomato", "pickles", "ham", "salami", "chipotle")),
-                new Burger("Chicken burger", usedToppings("lettuce", "chicken strips", "bacon", "tomato", "pickles", "onion (raw)", "bbq")),
-                new Burger("Hot burger", usedToppings("lettuce", "beef patty", "bacon", "jalapeno", "pickles", "onion (grilled)", "chili", "sriracha")),
-                new Burger("Cheesaur", usedToppings("cheese patty", "halloumi", "cucumber", "pickles", "tomato", "cheddar", "mozzarella"))));
-        if (index >= 0 && index < availableBurgers.size()) {
-            for (int i = 0; i < availableBurgers.size(); i++) {
-                if (i == index) {
-                    name = availableBurgers.get(index).getName();
-                    bun = Bun.PLAIN;
-                    toppings = availableBurgers.get(index).getToppings();
-                    double total = bun.getPrice();
-                    for (var topping : toppings) {
-                        total += topping.getPrice();
-                    }
-                    price = 0.85 * total;
-                }
-            }
-        }
-    }
-
-    private static Topping[] usedToppings(String... toppings) {
-        return Stream.of(toppings)
-                .map(Topping::new)
-                .toArray(Topping[]::new);
+    public static Burger createCustomBurger(Bun bun, Topping... toppings) {
+        return new Burger(bun, toppings);
     }
 
     public String getName() {
