@@ -94,6 +94,10 @@ public class Burger {
     }
 
     public static Burger createCustomBurger(Bun bun, int... index) {
+        if(index.length < 4){
+            System.err.println("Can't create burger without at least 4 toppings");
+            return null;
+        }
         return new Burger(bun, index);
     }
 
