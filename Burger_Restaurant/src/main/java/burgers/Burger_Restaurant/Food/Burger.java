@@ -1,40 +1,32 @@
 package burgers.Burger_Restaurant.Food;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
-class BurgerManager {
-    private final List<Burger> availableBurgers;
-
-    public BurgerManager() {
-        availableBurgers = createAvailableBurgers();
-    }
-
-    public List<Burger> getAvailableBurgers() {
-        return availableBurgers;
-    }
-
-    private static List<Burger> createAvailableBurgers(){
-        return List.of(
-                new Burger("Hamburger", usedToppings(0, 12, 15, 1, 6, 2, 25)),
-                new Burger("Cheeseburger", usedToppings(0, 12, 15, 1, 6, 2, 18, 19, 25)),
-                new Burger("Veggie", usedToppings(0, 8, 11, 7, 1, 2, 5, 30)),
-                new Burger("Meat-boy", usedToppings(0, 14, 15, 1, 6, 16, 17, 26)),
-                new Burger("Chicken burger", usedToppings(0, 13, 15, 1, 6, 2, 25)),
-                new Burger("Hot burger", usedToppings(0, 12, 15, 9, 6, 3, 10, 29)),
-                new Burger("Cheesaur", usedToppings(22, 23, 4, 6, 1, 18, 19)
-                ));
-    }
-
-    private static Topping[] usedToppings(Integer... toppings) {
-        ToppingManager toppingManager = new ToppingManager();
-
-        return Stream.of(toppings)
-                .map(toppingManager::getToppingByIndex)
-                .toArray(Topping[]::new);
-    }
-}
 public class Burger {
+
+    static class BurgerManager {
+        private final List<Burger> availableBurgers;
+
+        public BurgerManager() {
+            availableBurgers = createAvailableBurgers();
+        }
+
+        public List<Burger> getAvailableBurgers() {
+            return availableBurgers;
+        }
+
+        private static List<Burger> createAvailableBurgers() {
+            return List.of(
+                    new Burger("Hamburger", 0, 12, 15, 1, 6, 2, 25),
+                    new Burger("Cheeseburger", 0, 12, 15, 1, 6, 2, 18, 19, 25),
+                    new Burger("Veggie", 0, 8, 11, 7, 1, 2, 5, 30),
+                    new Burger("Meat-boy", 0, 14, 15, 1, 6, 16, 17, 26),
+                    new Burger("Chicken burger", 0, 13, 15, 1, 6, 2, 25),
+                    new Burger("Hot burger", 0, 12, 15, 9, 6, 3, 10, 29),
+                    new Burger("Cheesaur", 22, 23, 4, 6, 1, 18, 19));
+        }
+    }
     public enum Bun {
         PLAIN(1.12), SESAME(1.25), WHEAT(1.12), GRAHAM(1.18);
         private final double price;
@@ -51,20 +43,44 @@ public class Burger {
     private String name;
     private final Bun bun;
     private final List<Topping> toppings;
-    private Double price;
+    private final Double price;
 
-    public Burger(int index){
+    public Burger(int index) {
         BurgerManager burgerManager = new BurgerManager();
-        Burger preparedBurger = burgerManager.getAvailableBurgers().get(index);
-        name = preparedBurger.getName();
-        bun = preparedBurger.getBun();
-        toppings = preparedBurger.getToppings();
-        price = preparedBurger.getPrice();
+        Burger preparedBurger = null;
+        try {
+            preparedBurger = burgerManager.getAvailableBurgers().get(index);
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            System.out.println("Exception: Unauthorised burger ");
+        }
+        if(preparedBurger != null) {
+            name = preparedBurger.getName();
+            bun = preparedBurger.getBun();
+            toppings = preparedBurger.getToppings();
+            price = preparedBurger.getPrice();
+        }else{
+            name = null;
+            bun = null;
+            toppings = null;
+            price = null;
+        }
     }
-    private Burger(Bun bun, Topping... toppings) {
+
+    private Burger(Bun bun, int... index) {
         name = "Custom";
         this.bun = bun;
-        this.toppings = List.of(toppings);
+        List<Topping> addedToppings = new ArrayList<>();
+        Topping.ToppingManager toppingManager = new Topping.ToppingManager();
+
+        for (int i : index) {
+            try {
+                Topping topping = toppingManager.getToppingByIndex(i);
+                addedToppings.add(topping);
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Exception: " + iae.getMessage());
+            }
+        }
+        toppings = addedToppings;
         double total = bun.getPrice();
         for (var topping : toppings) {
             total += topping.getPrice();
@@ -72,18 +88,13 @@ public class Burger {
         price = total;
     }
 
-    protected Burger(String name, Topping... toppings) {
-        this(Bun.PLAIN, toppings);
+    protected Burger(String name, int... index) {
+        this(Bun.PLAIN, index);
         this.name = name;
-//        double total = bun.getPrice();
-//        for (var topping : toppings) {
-//            total += topping.getPrice();
-//        }
-//        price = total;
     }
 
-    public static Burger createCustomBurger(Bun bun, Topping... toppings) {
-        return new Burger(bun, toppings);
+    public static Burger createCustomBurger(Bun bun, int... index) {
+        return new Burger(bun, index);
     }
 
     public String getName() {
@@ -105,6 +116,9 @@ public class Burger {
     @Override
     public String toString() {
         StringBuilder toppingsString = new StringBuilder();
+        if(name == null || price == null || toppings == null || bun == null){
+            return "";
+        }
         for (Topping topping : toppings) {
             toppingsString.append(topping.toString()).append("+\n");
         }
