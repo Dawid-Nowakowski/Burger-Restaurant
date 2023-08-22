@@ -52,8 +52,5 @@ public class BurgerTest {
     @Test
     public void shouldNotFindAvailableBurger() {
         Burger.BurgerManager burgerManager = new Burger.BurgerManager();
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            burgerManager.getAvailableBurgers().get(7);
-        });
-    }
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> burgerManager.getAvailableBurgers().get(7));}
 }

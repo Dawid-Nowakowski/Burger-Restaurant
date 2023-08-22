@@ -51,7 +51,7 @@ public class Burger {
         try {
             preparedBurger = burgerManager.getAvailableBurgers().get(index);
         } catch (ArrayIndexOutOfBoundsException aioobe) {
-            System.out.println("Exception: Unauthorised burger ");
+            System.out.println("Exception: Unauthorised burger");
         }
         if(preparedBurger != null) {
             name = preparedBurger.getName();
@@ -72,9 +72,9 @@ public class Burger {
         List<Topping> addedToppings = new ArrayList<>();
         Topping.ToppingManager toppingManager = new Topping.ToppingManager();
 
-        for (int i : index) {
+        for (int id : index) {
             try {
-                Topping topping = toppingManager.getToppingByIndex(i);
+                Topping topping = toppingManager.getToppingByIndex(id);
                 addedToppings.add(topping);
             } catch (IllegalArgumentException iae) {
                 System.out.println("Exception: " + iae.getMessage());
@@ -88,7 +88,7 @@ public class Burger {
         price = total;
     }
 
-    protected Burger(String name, int... index) {
+    private Burger(String name, int... index) {
         this(Bun.PLAIN, index);
         this.name = name;
     }
