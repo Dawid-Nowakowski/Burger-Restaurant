@@ -3,9 +3,9 @@ package burgers.Burger_Restaurant.Food;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Burger {
+public class Burger extends Product{
 
-    static class BurgerManager {
+    public static class BurgerManager {
         private final List<Burger> availableBurgers;
 
         public BurgerManager() {
@@ -18,13 +18,13 @@ public class Burger {
 
         private static List<Burger> createAvailableBurgers() {
             return List.of(
-                    new Burger("Hamburger", 0, 12, 15, 1, 6, 2, 25),
-                    new Burger("Cheeseburger", 0, 12, 15, 1, 6, 2, 18, 19, 25),
-                    new Burger("Veggie", 0, 8, 11, 7, 1, 2, 5, 30),
-                    new Burger("Meat-boy", 0, 14, 15, 1, 6, 16, 17, 26),
-                    new Burger("Chicken burger", 0, 13, 15, 1, 6, 2, 25),
-                    new Burger("Hot burger", 0, 12, 15, 9, 6, 3, 10, 29),
-                    new Burger("Cheesaur", 22, 23, 4, 6, 1, 18, 19));
+                    /*0*/ new Burger("Hamburger", 0, 12, 15, 1, 6, 2, 25),
+                    /*1*/ new Burger("Cheeseburger", 0, 12, 15, 1, 6, 2, 18, 19, 25),
+                    /*2*/ new Burger("Veggie", 0, 8, 11, 7, 1, 2, 5, 30),
+                    /*3*/ new Burger("Meat-boy", 0, 14, 15, 1, 6, 16, 17, 26),
+                    /*4*/ new Burger("Chicken burger", 0, 13, 15, 1, 6, 2, 25),
+                    /*5*/ new Burger("Hot burger", 0, 12, 15, 9, 6, 3, 10, 29),
+                    /*6*/ new Burger("Cheesaur", 22, 23, 4, 6, 1, 18, 19));
         }
     }
 
@@ -36,17 +36,16 @@ public class Burger {
             this.price = price;
         }
 
-        public double getPrice() {
+        public double getBunPrice() {
             return price;
         }
     }
 
-    private String name;
     private final Bun bun;
     private final List<Topping> toppings;
-    private final Double price;
 
     public Burger(int index) {
+        super("",0);
         BurgerManager burgerManager = new BurgerManager();
         Burger preparedBurger = null;
         try {
@@ -55,20 +54,20 @@ public class Burger {
             System.out.println("Exception: Unauthorised burger");
         }
         if (preparedBurger != null) {
-            name = preparedBurger.getName();
+            this.setName(preparedBurger.getName());
             bun = preparedBurger.getBun();
             toppings = preparedBurger.getToppings();
-            price = preparedBurger.getPrice();
+            this.setPrice(preparedBurger.getPriceCalculated());
         } else {
-            name = null;
+            this.setName(null);
             bun = null;
             toppings = null;
-            price = null;
+            this.setPrice(null);
         }
     }
 
     private Burger(Bun bun, int... index) {
-        name = "Custom";
+        super("Custom", 0);
         this.bun = bun;
         List<Topping> addedToppings = new ArrayList<>();
 
@@ -81,16 +80,12 @@ public class Burger {
             }
         }
         toppings = addedToppings;
-        double total = bun.getPrice();
-        for (var topping : toppings) {
-            total += topping.getPrice();
-        }
-        price = total;
+        this.setPrice(getPriceCalculated());
     }
 
     private Burger(String name, int... index) {
         this(Bun.PLAIN, index);
-        this.name = name;
+        this.setName(name);
     }
 
     public static Burger createCustomBurger(Bun bun, int... index) {
@@ -101,10 +96,6 @@ public class Burger {
         return new Burger(bun, index);
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Bun getBun() {
         return bun;
     }
@@ -113,14 +104,18 @@ public class Burger {
         return toppings;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getPriceCalculated() {
+        Double total = bun.getBunPrice();
+        for (var topping : toppings) {
+            total += topping.getPrice();
+        }
+        return total;
     }
 
     @Override
     public String toString() {
         StringBuilder toppingsString = new StringBuilder();
-        if (name == null || price == null || toppings == null || bun == null) {
+        if (this.getName() == null || this.getPrice() == null || toppings == null || bun == null) {
             return "";
         }
         for (Topping topping : toppings) {
@@ -131,6 +126,6 @@ public class Burger {
         }
         String spacer = "_ ".repeat(20);
         String bunName = bun.name().charAt(0) + bun.name().toLowerCase().substring(1) + " bun";
-        return String.format("%30s : $%.2f %n%s%n%30s : $%.2f+%n%s", name, price, spacer, bunName, bun.getPrice(), toppingsString);
+        return String.format("%30s : $%.2f %n%s%n%30s : $%.2f+%n%s", this.getName(), this.getPrice(), spacer, bunName, bun.getBunPrice(), toppingsString);
     }
 }

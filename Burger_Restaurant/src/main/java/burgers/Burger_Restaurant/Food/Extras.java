@@ -2,7 +2,7 @@ package burgers.Burger_Restaurant.Food;
 
 import java.util.List;
 
-public class Extras {
+public class Extras extends Product {
     public static class ExtrasManager {
         private final List<Extras> availableExtras;
 
@@ -12,25 +12,25 @@ public class Extras {
 
         private static List<Extras> createAvailableExtras() {
             return List.of(
-                    new Extras("Coke", Extras.Type.DRINK, Extras.Size.SMALL, 2.1),
-                    new Extras("Coke", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.6),
-                    new Extras("Orangeade", Extras.Type.DRINK, Extras.Size.SMALL, 1.7),
-                    new Extras("Orangeade", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.06),
-                    new Extras("Apple Juice", Extras.Type.DRINK, Extras.Size.SMALL, 1.85),
-                    new Extras("Orange Juice", Extras.Type.DRINK, Extras.Size.SMALL, 1.85),
-                    new Extras("Black Tea", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.2),
-                    new Extras("Green Tea", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.32),
-                    new Extras("Black Coffee", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.15),
-                    new Extras("Cappuccino", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.17),
-                    new Extras("Latte", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.3),
-                    new Extras("Fries", Extras.Type.SNACK, Extras.Size.SMALL, 2.7),
-                    new Extras("Fries", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.2),
-                    new Extras("Fries", Extras.Type.SNACK, Extras.Size.LARGE, 3.6),
-                    new Extras("Onion Rings", Extras.Type.SNACK, Extras.Size.SMALL, 2.94),
-                    new Extras("Onion Rings", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.48),
-                    new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.SMALL, 3.2),
-                    new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.7),
-                    new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.LARGE, 4.2)
+                    /*0*/  new Extras("Coke", Extras.Type.DRINK, Extras.Size.SMALL, 2.1),
+                    /*1*/  new Extras("Coke", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.6),
+                    /*2*/  new Extras("Orangeade", Extras.Type.DRINK, Extras.Size.SMALL, 1.7),
+                    /*3*/  new Extras("Orangeade", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.06),
+                    /*4*/  new Extras("Apple Juice", Extras.Type.DRINK, Extras.Size.SMALL, 1.85),
+                    /*5*/  new Extras("Orange Juice", Extras.Type.DRINK, Extras.Size.SMALL, 1.85),
+                    /*6*/  new Extras("Black Tea", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.2),
+                    /*7*/  new Extras("Green Tea", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.32),
+                    /*8*/  new Extras("Black Coffee", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.15),
+                    /*9*/  new Extras("Cappuccino", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.17),
+                    /*10*/ new Extras("Latte", Extras.Type.DRINK, Extras.Size.MEDIUM, 2.3),
+                    /*11*/ new Extras("Fries", Extras.Type.SNACK, Extras.Size.SMALL, 2.7),
+                    /*12*/ new Extras("Fries", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.2),
+                    /*13*/ new Extras("Fries", Extras.Type.SNACK, Extras.Size.LARGE, 3.6),
+                    /*14*/ new Extras("Onion Rings", Extras.Type.SNACK, Extras.Size.SMALL, 2.94),
+                    /*15*/ new Extras("Onion Rings", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.48),
+                    /*16*/ new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.SMALL, 3.2),
+                    /*17*/ new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.MEDIUM, 3.7),
+                    /*18*/ new Extras("Chicken Strips", Extras.Type.SNACK, Extras.Size.LARGE, 4.2)
             );
         }
 
@@ -64,20 +64,18 @@ public class Extras {
             return null;
         }
     }
-
-    private final String name;
     private final Type type;
     private final Size size;
-    private final Double price;
+    //private final Double price;
 
     private Extras(String name, Type type, Size size, Double price) {
-        this.name = name;
+        super(name, price);
         this.type = type;
         this.size = size;
-        this.price = price;
     }
 
     public Extras(int index) {
+        super("",0);
         ExtrasManager extrasManager = new ExtrasManager();
         Extras extras = null;
         try {
@@ -86,20 +84,16 @@ public class Extras {
             System.out.println("Exception: Unauthorised extra");
         }
         if (extras != null) {
-            name = extras.getName();
+            this.setName(extras.getName());
             type = extras.getType();
             size = extras.getSize();
-            price = extras.getPrice();
+            this.setPrice(extras.getPrice());
         } else {
-            name = null;
+            this.setName(null);
             type = null;
             size = null;
-            price = null;
+            this.setPrice(null);
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Type getType() {
@@ -110,15 +104,11 @@ public class Extras {
         return size;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
     @Override
     public String toString() {
-        if (name != null) {
-            return String.format("%30s : $%.2f", name.toUpperCase().charAt(0) +
-                    name.substring(1) + "  " + size.getValue(getType()), price);
+        if (this.getName() != null) {
+            return String.format("%30s : $%.2f", this.getName().toUpperCase().charAt(0) +
+                    this.getName().substring(1) + "  " + size.getValue(getType()), this.getPrice());
         }
         return "Unauthorized extra";
     }
