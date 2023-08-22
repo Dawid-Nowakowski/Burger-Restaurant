@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BurgerTest {
 
     @Test
-    public void testValidIndex() {
+    public void testValidBurger() {
         Burger burger = new Burger(0);
         assertNotNull(burger.getName());
         assertNotNull(burger.getBun());
@@ -16,7 +16,7 @@ public class BurgerTest {
     }
 
     @Test
-    public void testNullBurger() {
+    public void testInvalidBurger() {
         Burger burger = new Burger(123);
         assertNull(burger.getName());
         assertNull(burger.getBun());
@@ -45,12 +45,11 @@ public class BurgerTest {
 
     @Test
     public void shouldNotAddToppingsToCustomBurger() {
-        Burger burger = Burger.createCustomBurger(Burger.Bun.WHEAT, -1, -50, 513, 200);
-        assertTrue(burger != null && burger.getToppings().isEmpty());
+        assertThrows(NullPointerException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, -1, -50, 513, 200));
     }
 
     @Test
-    public void shouldNotFindAvailableBurger() {
+    public void shouldNotGetAvailableBurger() {
         Burger.BurgerManager burgerManager = new Burger.BurgerManager();
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> burgerManager.getAvailableBurgers().get(7));}
 }

@@ -27,6 +27,7 @@ public class Burger {
                     new Burger("Cheesaur", 22, 23, 4, 6, 1, 18, 19));
         }
     }
+
     public enum Bun {
         PLAIN(1.12), SESAME(1.25), WHEAT(1.12), GRAHAM(1.18);
         private final double price;
@@ -53,12 +54,12 @@ public class Burger {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             System.out.println("Exception: Unauthorised burger");
         }
-        if(preparedBurger != null) {
+        if (preparedBurger != null) {
             name = preparedBurger.getName();
             bun = preparedBurger.getBun();
             toppings = preparedBurger.getToppings();
             price = preparedBurger.getPrice();
-        }else{
+        } else {
             name = null;
             bun = null;
             toppings = null;
@@ -70,11 +71,10 @@ public class Burger {
         name = "Custom";
         this.bun = bun;
         List<Topping> addedToppings = new ArrayList<>();
-        Topping.ToppingManager toppingManager = new Topping.ToppingManager();
 
         for (int id : index) {
             try {
-                Topping topping = toppingManager.getToppingByIndex(id);
+                Topping topping = new Topping(id);
                 addedToppings.add(topping);
             } catch (IllegalArgumentException iae) {
                 System.out.println("Exception: " + iae.getMessage());
@@ -94,7 +94,7 @@ public class Burger {
     }
 
     public static Burger createCustomBurger(Bun bun, int... index) {
-        if(index.length < 4){
+        if (index.length < 4) {
             System.err.println("Can't create burger without at least 4 toppings");
             return null;
         }
@@ -120,7 +120,7 @@ public class Burger {
     @Override
     public String toString() {
         StringBuilder toppingsString = new StringBuilder();
-        if(name == null || price == null || toppings == null || bun == null){
+        if (name == null || price == null || toppings == null || bun == null) {
             return "";
         }
         for (Topping topping : toppings) {

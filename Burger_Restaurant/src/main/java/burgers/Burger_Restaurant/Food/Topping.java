@@ -12,13 +12,6 @@ public class Topping {
             availableToppings = createAvailableToppings();
         }
 
-        public Topping getToppingByIndex(int index) {
-            if (index >= 0 && index < availableToppings.size()) {
-                return availableToppings.get(index);
-            } else
-                throw new IllegalArgumentException("Unauthorized topping");
-        }
-
         public List<Topping> createAvailableToppings() {
             return List.of(
                     /*0*/  new Topping("Lettuce", Topping.Type.VEGGIE, 0.5),
@@ -59,6 +52,7 @@ public class Topping {
             return availableToppings;
         }
     }
+
     enum Type {VEGGIE, MEAT, DAIRY, SAUCE}
 
     private final String name;
@@ -69,6 +63,25 @@ public class Topping {
         this.name = name;
         this.type = type;
         this.price = price;
+    }
+
+    public Topping(int index) {
+        ToppingManager toppingManager = new ToppingManager();
+        Topping topping = null;
+        try {
+            topping = toppingManager.getAvailableToppings().get(index);
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            System.out.println("Exception: Unauthorised topping");
+        }
+        if (topping != null) {
+            name = topping.getName();
+            type = topping.getType();
+            price = topping.getPrice();
+        } else {
+            name = null;
+            type = null;
+            price = null;
+        }
     }
 
     public String getName() {

@@ -9,12 +9,21 @@ public class ExtrasTest {
     private final Extras.ExtrasManager extrasManager = new Extras.ExtrasManager();
 
     @Test
-    public void testValidIndex() {
+    public void testValidExtra() {
         Extras extras = new Extras(0);
         assertNotNull(extras.getName());
         assertNotNull(extras.getType());
         assertNotNull(extras.getSize());
         assertNotNull(extras.getPrice());
+    }
+
+    @Test
+    public void testInvalidExtra() {
+        Extras extras = new Extras(51);
+        assertNull(extras.getName());
+        assertNull(extras.getType());
+        assertNull(extras.getSize());
+        assertNull(extras.getPrice());
     }
 
     @Test
