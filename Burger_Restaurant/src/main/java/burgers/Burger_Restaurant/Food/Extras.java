@@ -66,7 +66,6 @@ public class Extras extends Product {
     }
     private final Type type;
     private final Size size;
-    //private final Double price;
 
     private Extras(String name, Type type, Size size, Double price) {
         super(name, price);

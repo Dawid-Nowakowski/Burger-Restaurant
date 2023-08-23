@@ -13,6 +13,7 @@ public class BurgerTest {
         assertNotNull(burger.getBun());
         assertNotNull(burger.getToppings());
         assertNotNull(burger.getPrice());
+        System.out.println("1");
     }
 
     @Test
@@ -22,6 +23,7 @@ public class BurgerTest {
         assertNull(burger.getBun());
         assertNull(burger.getToppings());
         assertNull(burger.getPrice());
+        System.out.println("2");
     }
 
     @Test
@@ -29,6 +31,7 @@ public class BurgerTest {
         assertDoesNotThrow(() -> {
             Burger.createCustomBurger(Burger.Bun.PLAIN, 1, 3, 6, 9, 15, 20, 25, 30);
         });
+        System.out.println("3");
     }
 
     @Test
@@ -41,15 +44,18 @@ public class BurgerTest {
         assertNull(burger2);
         assertNull(burger3);
         assertNull(burger4);
+        System.out.println("4");
     }
 
     @Test
     public void shouldNotAddToppingsToCustomBurger() {
         assertThrows(NullPointerException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, -1, -50, 513, 200));
+        System.out.println("5");
     }
 
     @Test
     public void shouldNotGetAvailableBurger() {
         Burger.BurgerManager burgerManager = new Burger.BurgerManager();
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> burgerManager.getAvailableBurgers().get(7));}
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> burgerManager.getAvailableBurgers().get(7));
+        System.out.println("6");}
 }
