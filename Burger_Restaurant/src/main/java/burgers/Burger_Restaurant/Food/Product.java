@@ -25,4 +25,9 @@ public class Product {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%29s : $%6.2f%n", this.getName(), this.getPrice());
+    }
 }

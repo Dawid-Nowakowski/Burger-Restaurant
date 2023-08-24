@@ -1,61 +1,60 @@
 package burgers.Burger_Restaurant.Food;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BurgerTest {
 
-    @Test
-    public void testValidBurger() {
-        Burger burger = new Burger(0);
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6})
+    public void testValidBurger(int value) {
+        Burger burger = new Burger(value);
         assertNotNull(burger.getName());
         assertNotNull(burger.getBun());
         assertNotNull(burger.getToppings());
         assertNotNull(burger.getPrice());
-        System.out.println("1");
+        System.out.println(burger);
     }
 
-    @Test
-    public void testInvalidBurger() {
-        Burger burger = new Burger(123);
-        assertNull(burger.getName());
-        assertNull(burger.getBun());
-        assertNull(burger.getToppings());
-        assertNull(burger.getPrice());
-        System.out.println("2");
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 123, 7})
+    public void testInvalidBurger(int value) {
+        assertThrows(IllegalArgumentException.class, () -> new Burger(value));
     }
 
     @Test
     public void shouldCreateCustomBurger() {
-        assertDoesNotThrow(() -> {
-            Burger.createCustomBurger(Burger.Bun.PLAIN, 1, 3, 6, 9, 15, 20, 25, 30);
-        });
-        System.out.println("3");
+        assertDoesNotThrow(() -> Burger.createCustomBurger(Burger.Bun.PLAIN, 1, 3, 6, 9, 15, 20, 25, 30));
     }
 
     @Test
     public void shouldNotCreateCustomBurger() {
-        Burger burger1 = Burger.createCustomBurger(Burger.Bun.WHEAT);
-        Burger burger2 = Burger.createCustomBurger(Burger.Bun.WHEAT, 0);
-        Burger burger3 = Burger.createCustomBurger(Burger.Bun.WHEAT, 0, 1);
-        Burger burger4 = Burger.createCustomBurger(Burger.Bun.WHEAT, 0, 1, 2);
-        assertNull(burger1);
-        assertNull(burger2);
-        assertNull(burger3);
-        assertNull(burger4);
-        System.out.println("4");
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT));
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, 0));
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, 0, 1));
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, 0, 1, 2));
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, 0, 1, 2, 6, -1, 2, 5));
     }
 
     @Test
     public void shouldNotAddToppingsToCustomBurger() {
-        assertThrows(NullPointerException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, -1, -50, 513, 200));
-        System.out.println("5");
+        assertThrows(IllegalArgumentException.class, () -> Burger.createCustomBurger(Burger.Bun.WHEAT, -1, -50, 513, 200));
     }
 
     @Test
-    public void shouldNotGetAvailableBurger() {
-        Burger.BurgerManager burgerManager = new Burger.BurgerManager();
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> burgerManager.getAvailableBurgers().get(7));
-        System.out.println("6");}
+    public void shouldNotCreateAvailableBurger() {
+        assertThrows(IllegalArgumentException.class, () -> new Burger(7));
+    }
+
+    @Test
+    public void shouldRemoveTopping() {
+        Burger burger = new Burger(0);
+        int before = burger.getToppings().size();
+        assertDoesNotThrow(() -> burger.removeTopping(0, 1, 2));
+        int after = burger.getToppings().size();
+        assertEquals(after, before - 3);
+    }
 }

@@ -19,11 +19,9 @@ public class ExtrasTest {
 
     @Test
     public void testInvalidExtra() {
-        Extras extras = new Extras(51);
-        assertNull(extras.getName());
-        assertNull(extras.getType());
-        assertNull(extras.getSize());
-        assertNull(extras.getPrice());
+        assertThrows(IllegalArgumentException.class, () -> {
+            Extras extras = new Extras(51);
+        });
     }
 
     @Test

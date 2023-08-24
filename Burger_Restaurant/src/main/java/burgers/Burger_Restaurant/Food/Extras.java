@@ -68,7 +68,7 @@ public class Extras extends Product {
     private final Size size;
 
     private Extras(String name, Type type, Size size, Double price) {
-        super(name, price);
+        super(name + " " + size.getValue(type), price);
         this.type = type;
         this.size = size;
     }
@@ -88,10 +88,7 @@ public class Extras extends Product {
             size = extras.getSize();
             this.setPrice(extras.getPrice());
         } else {
-            this.setName(null);
-            type = null;
-            size = null;
-            this.setPrice(null);
+            throw new IllegalArgumentException();
         }
     }
 
@@ -106,8 +103,7 @@ public class Extras extends Product {
     @Override
     public String toString() {
         if (this.getName() != null) {
-            return String.format("%30s : $%.2f", this.getName().toUpperCase().charAt(0) +
-                    this.getName().substring(1) + "  " + size.getValue(getType()), this.getPrice());
+            return super.toString();
         }
         return "Unauthorized extra";
     }

@@ -1,6 +1,7 @@
 package burgers.Burger_Restaurant.Food;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class Topping {
@@ -76,11 +77,9 @@ public class Topping {
         if (topping != null) {
             name = topping.getName();
             type = topping.getType();
-            price = topping.getPrice();
+            price = topping.getToppingPrice();
         } else {
-            name = null;
-            type = null;
-            price = null;
+            throw new IllegalArgumentException();
         }
     }
 
@@ -92,7 +91,7 @@ public class Topping {
         return type;
     }
 
-    public Double getPrice() {
+    public Double getToppingPrice() {
         return price;
     }
 
@@ -102,5 +101,18 @@ public class Topping {
             return "Unauthorized topping";
         }
         return String.format("%30s : $%.2f", name.toUpperCase().charAt(0) + name.substring(1), price);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Topping topping = (Topping) o;
+        return Objects.equals(name, topping.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

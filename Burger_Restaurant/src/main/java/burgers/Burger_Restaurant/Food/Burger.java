@@ -3,7 +3,7 @@ package burgers.Burger_Restaurant.Food;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Burger extends Product{
+public class Burger extends Product {
 
     public static class BurgerManager {
         private final List<Burger> availableBurgers;
@@ -41,57 +41,49 @@ public class Burger extends Product{
         }
     }
 
-    private final Bun bun;
-    private final List<Topping> toppings;
+    private Bun bun;
+    private List<Topping> toppings = new ArrayList<>();
 
     public Burger(int index) {
-        super("",0);
+        super("", 0);
         BurgerManager burgerManager = new BurgerManager();
         Burger preparedBurger = null;
         try {
             preparedBurger = burgerManager.getAvailableBurgers().get(index);
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
+        } catch (IndexOutOfBoundsException ioobe) {
             System.out.println("Exception: Unauthorised burger");
+            throw new IllegalArgumentException("Product with ID " + index + " not available.");
         }
         if (preparedBurger != null) {
             this.setName(preparedBurger.getName());
             bun = preparedBurger.getBun();
             toppings = preparedBurger.getToppings();
             this.setPrice(preparedBurger.getPriceCalculated());
-        } else {
-            this.setName(null);
-            bun = null;
-            toppings = null;
-            this.setPrice(null);
         }
     }
 
-    private Burger(Bun bun, int... index) {
+    private Burger(Bun bun, int... toppingIndex) {
         super("Custom", 0);
         this.bun = bun;
-        List<Topping> addedToppings = new ArrayList<>();
 
-        for (int id : index) {
-            try {
-                Topping topping = new Topping(id);
-                addedToppings.add(topping);
-            } catch (IllegalArgumentException iae) {
-                System.out.println("Exception: " + iae.getMessage());
-            }
-        }
-        toppings = addedToppings;
+        this.addTopping(toppingIndex);
         this.setPrice(getPriceCalculated());
     }
 
-    private Burger(String name, int... index) {
-        this(Bun.PLAIN, index);
+    private Burger(String name, int... toppingIndex) {
+        this(Bun.PLAIN, toppingIndex);
         this.setName(name);
     }
 
     public static Burger createCustomBurger(Bun bun, int... index) {
+        Topping.ToppingManager tp = new Topping.ToppingManager();
         if (index.length < 4) {
-            System.err.println("Can't create burger without at least 4 toppings");
-            return null;
+            throw new IllegalArgumentException("Can't create burger without at least 4 toppings");
+        }
+        for (int id : index) {
+            if (id > tp.getAvailableToppings().size() || id < 0) {
+                throw new IllegalArgumentException();
+            }
         }
         return new Burger(bun, index);
     }
@@ -100,32 +92,50 @@ public class Burger extends Product{
         return bun;
     }
 
+    public void setBun(Bun bun) {
+        this.bun = bun;
+    }
+
     public List<Topping> getToppings() {
         return toppings;
     }
 
     public Double getPriceCalculated() {
         Double total = bun.getBunPrice();
-        for (var topping : toppings) {
-            total += topping.getPrice();
+        for (var topping : getToppings()) {
+            total += topping.getToppingPrice();
         }
         return total;
     }
 
+    public void removeTopping(int... toppingIndex) {
+        List<Topping> toppingsToRemove = new ArrayList<>();
+        for (var id : toppingIndex) {
+            try {
+                toppingsToRemove.add(new Topping(id));
+            } catch (IllegalArgumentException iae){
+                System.out.println("Exception: " + iae.getMessage());
+            }
+        }
+        this.getToppings().removeAll(toppingsToRemove);
+    }
+
+    public void addTopping(int... toppingIndex) {
+        for (int id : toppingIndex) {
+            try {
+                Topping topping = new Topping(id);
+                getToppings().add(topping);
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Exception: " + iae.getMessage());
+            }
+        }
+    }
+
     @Override
     public String toString() {
-        StringBuilder toppingsString = new StringBuilder();
         if (this.getName() == null || this.getPrice() == null || toppings == null || bun == null) {
             return "";
         }
-        for (Topping topping : toppings) {
-            toppingsString.append(topping.toString()).append("+\n");
-        }
-        if (toppingsString.length() > 0) {
-            toppingsString.setLength(toppingsString.length() - 1);
-        }
-        String spacer = "_ ".repeat(20);
-        String bunName = bun.name().charAt(0) + bun.name().toLowerCase().substring(1) + " bun";
-        return String.format("%30s : $%.2f %n%s%n%30s : $%.2f+%n%s", this.getName(), this.getPrice(), spacer, bunName, bun.getBunPrice(), toppingsString);
+        return super.toString();
     }
 }
