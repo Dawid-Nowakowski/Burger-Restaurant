@@ -30,7 +30,7 @@ public class Burger extends Product {
 
     public enum Bun {
         PLAIN(1.12), SESAME(1.25), WHEAT(1.12), GRAHAM(1.18);
-        private final double price;
+        private double price;
 
         Bun(double price) {
             this.price = price;
@@ -39,13 +39,17 @@ public class Burger extends Product {
         public double getBunPrice() {
             return price;
         }
+
+        public void setBunPrice(double price) {
+            this.price = price;
+        }
     }
 
     private Bun bun;
     private List<Topping> toppings = new ArrayList<>();
 
     public Burger(int index) {
-        super("", 0);
+        super("Burger");
         BurgerManager burgerManager = new BurgerManager();
         Burger preparedBurger = null;
         try {
@@ -63,7 +67,7 @@ public class Burger extends Product {
     }
 
     private Burger(Bun bun, int... toppingIndex) {
-        super("Custom", 0);
+        super("Custom");
         this.bun = bun;
 
         this.addTopping(toppingIndex);
@@ -93,7 +97,9 @@ public class Burger extends Product {
     }
 
     public void setBun(Bun bun) {
+        this.bun.setBunPrice(bun.getBunPrice());
         this.bun = bun;
+        this.setPrice(getPriceCalculated());
     }
 
     public List<Topping> getToppings() {

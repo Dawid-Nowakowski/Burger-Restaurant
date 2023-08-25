@@ -79,7 +79,7 @@ public class Topping {
             type = topping.getType();
             price = topping.getToppingPrice();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Unallowed topping.");
         }
     }
 

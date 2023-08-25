@@ -19,9 +19,7 @@ public class ExtrasTest {
 
     @Test
     public void testInvalidExtra() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Extras extras = new Extras(51);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Extras(51));
     }
 
     @Test
@@ -31,6 +29,6 @@ public class ExtrasTest {
 
     @Test
     public void shouldNotGetExtra() {
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> extrasManager.getAvailableExtras().get(50));
+        assertThrows(IndexOutOfBoundsException.class, () -> extrasManager.getAvailableExtras().get(50));
     }
 }

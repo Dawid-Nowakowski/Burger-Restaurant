@@ -27,15 +27,16 @@ public class OrderTest {
 
     @Test
     public void shouldNotCreateOrder() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(-1, 7, 250);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Order(-1, 7, 250));
     }
 
     @Test
     public void shouldMakeCustomBurger() {
-        assertDoesNotThrow(() -> {
-            Order order = new Order((Burger.createCustomBurger(Burger.Bun.SESAME, 1, 2, 3, 4)));
-        });
+        assertDoesNotThrow(() -> new Order((Burger.createCustomBurger(Burger.Bun.SESAME, 1, 2, 3, 4))));
+    }
+
+    @Test
+    public void shouldNotCreateOrderWithInvalidProduct() {
+        assertThrows(IllegalArgumentException.class, () -> new Order(new Burger(8)));
     }
 }

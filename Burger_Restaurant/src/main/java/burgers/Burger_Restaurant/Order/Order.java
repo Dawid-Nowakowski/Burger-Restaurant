@@ -32,7 +32,6 @@ public class Order {
         this();
 
         for (int id : index) {
-            try {
                 Product p = availableProductsMap.get(id);
                 if (p != null) {
                     orderedProductsList.add(p);
@@ -41,9 +40,6 @@ public class Order {
                     orderNumber = null;
                     throw new IllegalArgumentException("Product with ID " + id + " not available.");
                 }
-            } catch (IndexOutOfBoundsException ioobe) {
-                System.out.println("Exception: " + ioobe.getMessage());
-            }
         }
     }
 

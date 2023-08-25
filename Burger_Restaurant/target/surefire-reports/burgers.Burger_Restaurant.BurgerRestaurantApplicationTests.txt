@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: burgers.Burger_Restaurant.BurgerRestaurantApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.131 s - in burgers.Burger_Restaurant.BurgerRestaurantApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.423 s - in burgers.Burger_Restaurant.BurgerRestaurantApplicationTests

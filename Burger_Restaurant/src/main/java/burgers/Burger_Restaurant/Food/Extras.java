@@ -68,18 +68,19 @@ public class Extras extends Product {
     private final Size size;
 
     private Extras(String name, Type type, Size size, Double price) {
-        super(name + " " + size.getValue(type), price);
+        super(name + " " + size.getValue(type));
         this.type = type;
         this.size = size;
+        this.setPrice(price);
     }
 
     public Extras(int index) {
-        super("",0);
+        super("Extra");
         ExtrasManager extrasManager = new ExtrasManager();
         Extras extras = null;
         try {
             extras = extrasManager.getAvailableExtras().get(index);
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
+        } catch (IndexOutOfBoundsException ioobe) {
             System.out.println("Exception: Unauthorised extra");
         }
         if (extras != null) {

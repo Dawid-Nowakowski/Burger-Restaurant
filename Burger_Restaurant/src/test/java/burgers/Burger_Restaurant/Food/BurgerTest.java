@@ -57,4 +57,22 @@ public class BurgerTest {
         int after = burger.getToppings().size();
         assertEquals(after, before - 3);
     }
+
+    @Test
+    public void shouldNotRemoveNotExistingToppingInBurger() {
+        Burger burger = new Burger(0);
+        int before = burger.getToppings().size();
+        burger.removeTopping(26);
+        int after = burger.getToppings().size();
+        assertEquals(before,after);
+    }
+
+    @Test
+    public void shouldChangeTotalPriceAfterBunChange(){
+        Burger burger = new Burger(0);
+        double beforePrice = burger.getPrice();
+        burger.setBun(Burger.Bun.SESAME);
+        double afterPrice = burger.getPrice();
+        assertNotEquals(beforePrice,afterPrice);
+    }
 }

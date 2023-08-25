@@ -5,9 +5,9 @@ public class Product {
     private String name;
     private Double price;
 
-    public Product(String name, double price) {
+    public Product(String name) {
         this.name = name;
-        this.price = price;
+        price = (double) 0;
     }
 
     public String getName() {
