@@ -14,19 +14,19 @@ import java.util.Map;
 public class Order {
     private Integer orderNumber;
     private List<Product> orderedProductsList = new ArrayList<>();
-    private final List<Extras> availableExtras = new Extras.ExtrasManager().getAvailableExtras();
-    private final List<Burger> availableBurgers = new Burger.BurgerManager().getAvailableBurgers();
+    private final List<Extras> availableExtras = Extras.ExtrasManager.getAvailableExtras();
+    private final List<Burger> availableBurgers = Burger.BurgerManager.getAvailableBurgers();
     private final Map<Integer, Product> availableProductsMap = createAvailableProducts(availableBurgers, availableExtras);
     private static int ID = 1;
     private double total;
-    private final String formattedDT;
+    private String formattedDT;
 
     public Order() {
         orderNumber = ID++;
-        LocalDateTime orderDateTime = LocalDateTime.now();
-        DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        formattedDT = orderDateTime.format(dtFormat);
+        generateDate();
     }
+
+    // constructor below allows to create new object of type Order by providing index from available products (availableProductsMap)
 
     public Order(int... index) {
         this();
@@ -66,6 +66,12 @@ public class Order {
             orderMap.put(key, e);
         }
         return orderMap;
+    }
+
+    public void generateDate(){
+        LocalDateTime orderDateTime = LocalDateTime.now();
+        DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        formattedDT = orderDateTime.format(dtFormat);
     }
 
     public Integer getOrderNumber() {

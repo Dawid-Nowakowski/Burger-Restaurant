@@ -5,14 +5,11 @@ import java.util.List;
 
 public class Burger extends Product {
 
+    //main goal of BurgerManager class is to generate list of burgers which are allowed to process through the app
     public static class BurgerManager {
-        private final List<Burger> availableBurgers;
+        private static final List<Burger> availableBurgers = createAvailableBurgers();
 
-        public BurgerManager() {
-            availableBurgers = createAvailableBurgers();
-        }
-
-        public List<Burger> getAvailableBurgers() {
+        public static List<Burger> getAvailableBurgers() {
             return availableBurgers;
         }
 
@@ -47,13 +44,14 @@ public class Burger extends Product {
 
     private Bun bun;
     private List<Topping> toppings = new ArrayList<>();
+    private final List<Burger> burgersList = BurgerManager.getAvailableBurgers();
 
+    // constructor below allows to create new object of type Burger by providing index from available burgers list (burgerList)
     public Burger(int index) {
         super("Burger");
-        BurgerManager burgerManager = new BurgerManager();
-        Burger preparedBurger = null;
+        Burger preparedBurger;
         try {
-            preparedBurger = burgerManager.getAvailableBurgers().get(index);
+            preparedBurger = burgersList.get(index);
         } catch (IndexOutOfBoundsException ioobe) {
             System.out.println("Exception: Unauthorised burger");
             throw new IllegalArgumentException("Product with ID " + index + " not available.");
@@ -66,6 +64,7 @@ public class Burger extends Product {
         }
     }
 
+    //constructor which allows to create CustomBurger
     private Burger(Bun bun, int... toppingIndex) {
         super("Custom");
         this.bun = bun;
@@ -74,11 +73,13 @@ public class Burger extends Product {
         this.setPrice(getPriceCalculated());
     }
 
+    // constructor used to create burgers in availableBurgers
     private Burger(String name, int... toppingIndex) {
         this(Bun.PLAIN, toppingIndex);
         this.setName(name);
     }
 
+    // logic of creating custom burger
     public static Burger createCustomBurger(Bun bun, int... index) {
         Topping.ToppingManager tp = new Topping.ToppingManager();
         if (index.length < 4) {
@@ -96,6 +97,7 @@ public class Burger extends Product {
         return bun;
     }
 
+    // after changing burgers bun, methods keeps track on changing bun and burgers price correctly
     public void setBun(Bun bun) {
         this.bun.setBunPrice(bun.getBunPrice());
         this.bun = bun;
@@ -106,6 +108,7 @@ public class Burger extends Product {
         return toppings;
     }
 
+    // calculates burgers total cost according to toppings and buns prices.
     public Double getPriceCalculated() {
         Double total = bun.getBunPrice();
         for (var topping : getToppings()) {
@@ -114,18 +117,20 @@ public class Burger extends Product {
         return total;
     }
 
+    // allows to remove topping(s) from existing burger
     public void removeTopping(int... toppingIndex) {
         List<Topping> toppingsToRemove = new ArrayList<>();
         for (var id : toppingIndex) {
             try {
                 toppingsToRemove.add(new Topping(id));
-            } catch (IllegalArgumentException iae){
+            } catch (IllegalArgumentException iae) {
                 System.out.println("Exception: " + iae.getMessage());
             }
         }
         this.getToppings().removeAll(toppingsToRemove);
     }
 
+    // allows to add topping(s) to existing burger
     public void addTopping(int... toppingIndex) {
         for (int id : toppingIndex) {
             try {

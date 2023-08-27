@@ -6,14 +6,11 @@ import java.util.Objects;
 
 public class Topping {
 
-    static class ToppingManager {
-        private final List<Topping> availableToppings;
+    //main goal of ToppingManager class is to generate list of toppings which are allowed to process through the app
+    public static class ToppingManager {
+        private static final List<Topping> availableToppings = createAvailableToppings();
 
-        public ToppingManager() {
-            availableToppings = createAvailableToppings();
-        }
-
-        public List<Topping> createAvailableToppings() {
+        public static List<Topping> createAvailableToppings() {
             return List.of(
                     /*0*/  new Topping("Lettuce", Type.VEGGIE, 0.5),
                     /*1*/  new Topping("Tomato", Type.VEGGIE, 1.05),
@@ -49,7 +46,7 @@ public class Topping {
             );
         }
 
-        public List<Topping> getAvailableToppings() {
+        public static List<Topping> getAvailableToppings() {
             return availableToppings;
         }
     }
@@ -60,18 +57,21 @@ public class Topping {
     private final Type type;
     private final Double price;
 
+    private List<Topping> toppingsList = ToppingManager.getAvailableToppings();
+
     private Topping(String name, Type type, Double price) {
         this.name = name;
         this.type = type;
         this.price = price;
     }
 
+    // constructor below allows to create new object of type Topping by providing index from available topping list (toppingsList)
+
     public Topping(int index) {
-        ToppingManager toppingManager = new ToppingManager();
         Topping topping = null;
         try {
-            topping = toppingManager.getAvailableToppings().get(index);
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            topping = toppingsList.get(index);
+        } catch (IndexOutOfBoundsException ioobe) {
             System.out.println("Exception: Unauthorised topping");
         }
         if (topping != null) {

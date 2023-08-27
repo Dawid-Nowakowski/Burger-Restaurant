@@ -3,6 +3,8 @@ package burgers.Burger_Restaurant.Food;
 import java.util.List;
 
 public class Extras extends Product {
+
+    //main goal of ExtrasManager class is to generate list of extras which are allowed to process through the app
     public static class ExtrasManager {
         private static final List<Extras> availableExtras = createAvailableExtras();
 
@@ -57,6 +59,7 @@ public class Extras extends Product {
     enum Size {
         SMALL, MEDIUM, LARGE;
 
+        // depending on the type of extras item, method generates different volume value
         private String getValue(Type type) {
             switch (type) {
                 case DRINK -> {
@@ -80,7 +83,7 @@ public class Extras extends Product {
 
     private final Type type;
     private Size size;
-    private final List<Extras> extrasList = new ExtrasManager().getAvailableExtras();
+    private final List<Extras> extrasList = ExtrasManager.getAvailableExtras();
 
     private Extras(String name, Type type, Size size, Double price) {
         super(name + " " + size.getValue(type));
@@ -89,6 +92,7 @@ public class Extras extends Product {
         this.setPrice(price);
     }
 
+    // constructor below allows to create new object of type Extras by providing index from available extras list (extrasList)
     public Extras(int index) {
         super("Extra");
         Extras extras = null;
@@ -115,6 +119,7 @@ public class Extras extends Product {
         return size;
     }
 
+    // method below allows to change the size of invoked object to demanded one, also setting price to equivalent of new size
     public void setSize(Size size) {
         Size actual = this.getSize();
         if (actual != size) {
