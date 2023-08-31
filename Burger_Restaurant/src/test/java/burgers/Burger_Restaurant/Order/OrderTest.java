@@ -20,8 +20,6 @@ public class OrderTest {
     public void ordersShouldHaveDifferentId() {
         Order order1 = new Order(0, 1);
         Order order2 = new Order(0, 105);
-        System.out.println(order1);
-        System.out.println(order2);
         assertNotSame(order1.getOrderNumber(), order2.getOrderNumber());
     }
 
@@ -38,5 +36,33 @@ public class OrderTest {
     @Test
     public void shouldNotCreateOrderWithInvalidProduct() {
         assertThrows(IllegalArgumentException.class, () -> new Order(new Burger(8)));
+    }
+
+    @Test
+    void shouldAddProductsToOrder() {
+        Order order = new Order();
+        order.addProductsByIndex(0, 1, 2, 3);
+        assertEquals(4, order.getOrderedProductsList().size());
+    }
+
+    @Test
+    void shouldRemoveProductsInOrder() {
+        Order order = new Order();
+        order.addProductsByIndex(0, 1, 2, 3);
+        order.removeProductsByIndex(0, 2);
+        assertEquals(2, order.getOrderedProductsList().size());
+    }
+
+    @Test
+    void shouldNotAddProductsToOrder() {
+        Order order = new Order();
+        assertThrows(IllegalArgumentException.class, () -> order.addProductsByIndex(0, 1, 2, 3, -1));
+    }
+
+    @Test
+    void shouldNotRemoveProductsInOrder() {
+        Order order = new Order();
+        order.addProductsByIndex(0, 1, 2, 3);
+        assertThrows(IllegalArgumentException.class, () -> order.removeProductsByIndex(0, 2, 5));
     }
 }

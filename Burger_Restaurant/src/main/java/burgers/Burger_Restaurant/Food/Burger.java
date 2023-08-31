@@ -64,6 +64,13 @@ public class Burger extends Product {
         }
     }
 
+    public Burger(Burger burger){
+        super("Another " + burger.getName());
+        bun = burger.getBun();
+        toppings = burger.getToppings();
+        this.setPrice(burger.getPriceCalculated());
+    }
+
     //constructor which allows to create CustomBurger
     private Burger(Bun bun, int... toppingIndex) {
         super("Custom");
@@ -81,12 +88,11 @@ public class Burger extends Product {
 
     // logic of creating custom burger
     public static Burger createCustomBurger(Bun bun, int... index) {
-        Topping.ToppingManager tp = new Topping.ToppingManager();
         if (index.length < 4) {
             throw new IllegalArgumentException("Can't create burger without at least 4 toppings");
         }
         for (int id : index) {
-            if (id > tp.getAvailableToppings().size() || id < 0) {
+            if (id > Topping.ToppingManager.getAvailableToppings().size() || id < 0) {
                 throw new IllegalArgumentException();
             }
         }

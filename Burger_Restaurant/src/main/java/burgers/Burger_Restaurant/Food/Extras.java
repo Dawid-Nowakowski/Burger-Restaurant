@@ -56,7 +56,7 @@ public class Extras extends Product {
 
     enum Type {DRINK, SNACK}
 
-    enum Size {
+    public enum Size {
         SMALL, MEDIUM, LARGE;
 
         // depending on the type of extras item, method generates different volume value

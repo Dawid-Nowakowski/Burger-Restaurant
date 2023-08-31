@@ -28,28 +28,63 @@ public class Order {
 
     // constructor below allows to create new object of type Order by providing index from available products (availableProductsMap)
 
-    public Order(int... index) {
+    public Order(int... productIndex) {
         this();
+        this.addProductsByIndex(productIndex);
+    }
 
-        for (int id : index) {
-                Product p = availableProductsMap.get(id);
-                if (p != null) {
-                    orderedProductsList.add(p);
-                    total += p.getPrice();
-                } else {
-                    orderNumber = null;
-                    throw new IllegalArgumentException("Product with ID " + id + " not available.");
-                }
+    public Order(Product... product) {
+        this();
+        this.addProducts(product);
+    }
+
+    public void addProducts(Product... product) {
+
+        for (var p : product) {
+            if (p != null) {
+                orderedProductsList.add(p);
+                total += p.getPrice();
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
-    public Order(Product product) {
-        this();
-        if (product != null) {
-            orderedProductsList.add(product);
-            total += product.getPrice();
-        } else {
-            throw new IllegalArgumentException();
+    public void addProductsByIndex(int... productIndex) {
+        for (int id : productIndex) {
+            Product p = availableProductsMap.get(id);
+            if (p != null) {
+                orderedProductsList.add(p);
+                total += p.getPrice();
+            } else {
+                orderNumber = null;
+                throw new IllegalArgumentException("Product with ID " + id + " not available.");
+            }
+        }
+    }
+
+    public void removeProducts(Product... product) {
+
+        for (var p : product) {
+            if (p != null && orderedProductsList.contains(p)) {
+                orderedProductsList.remove(p);
+                total -= p.getPrice();
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
+    public void removeProductsByIndex(int... productIndex) {
+        for (int id : productIndex) {
+            Product p = availableProductsMap.get(id);
+            if (p != null && orderedProductsList.contains(p)) {
+                orderedProductsList.remove(p);
+                total -= p.getPrice();
+            } else {
+                orderNumber = null;
+                throw new IllegalArgumentException("Product with ID " + id + " not available.");
+            }
         }
     }
 
@@ -68,7 +103,7 @@ public class Order {
         return orderMap;
     }
 
-    public void generateDate(){
+    public void generateDate() {
         LocalDateTime orderDateTime = LocalDateTime.now();
         DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         formattedDT = orderDateTime.format(dtFormat);
@@ -107,7 +142,7 @@ public class Order {
         String spacer = "- ".repeat(20);
         String line = "_".repeat(39);
         int position;
-        if(total > 99.99 && total < 1000){
+        if (total > 99.99 && total < 1000) {
             position = 31;
         } else if (total > 999.99 && total < 10000) {
             position = 30;

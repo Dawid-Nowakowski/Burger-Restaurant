@@ -16,7 +16,6 @@ public class BurgerTest {
         assertNotNull(burger.getBun());
         assertNotNull(burger.getToppings());
         assertNotNull(burger.getPrice());
-        System.out.println(burger);
     }
 
     @ParameterizedTest
