@@ -1,23 +1,43 @@
 package burgers.Burger_Restaurant.Food;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Product {
 
+    @Column(
+            nullable = false
+    )
     private String name;
+    @Column(
+            nullable = false
+    )
     private Double price;
-    private static int ID = 1;
-    private Integer id = 1;
+
+    @Id
+    @SequenceGenerator(
+            name = "product_id_sequence",
+            sequenceName = "product_id_sequence"
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "product_id_sequence"
+    )
+    private Integer id;
 
     public Product(String name) {
         this.name = name;
         price = (double) 0;
-        this.id = ID++;
+    }
+
+    public Product() {
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
