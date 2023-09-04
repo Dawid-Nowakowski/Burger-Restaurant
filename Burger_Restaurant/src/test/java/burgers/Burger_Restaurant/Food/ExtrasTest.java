@@ -31,7 +31,7 @@ public class ExtrasTest {
     }
 
     @Test
-    public void shouldSetSize(){
+    public void shouldSetSize() {
         Extras extras = new Extras(0);
         var extrasOldSize = extras.getSize();
         var extrasOldPrice = extras.getPrice();
